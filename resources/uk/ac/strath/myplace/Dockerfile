@@ -2,7 +2,6 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
-# Install some basics.
 RUN apt-get update && apt-get install -y unzip \
     curl git mysql-client mysql-server \
     postgresql postgresql-client \
@@ -10,11 +9,21 @@ RUN apt-get update && apt-get install -y unzip \
     # For add-apt-repository
     software-properties-common
 
-RUN add-apt-repository ppa:ondrej/php
+# Install some basics.
+RUN add-apt-repository ppa:ondrej/php && apt-get update
 
-RUN for ver in 7.2 7.3 7.4 8.0; do apt-get install -y php$ver php$ver-curl php$ver-gd php$ver-intl \
+# Add some configuration to PHP (only versions that are still in support will work.
+ADD php/php-config.ini /etc/php/7.2/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/7.3/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/7.4/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.0/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.1/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.2/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.3/conf.d/10-docker-php-ext-strath.ini
+
+RUN for ver in 7.2 7.3 7.4 8.0 8.1 8.2 8.3; do apt-get install -y php$ver php$ver-curl php$ver-gd php$ver-intl \
     php$ver-mbstring php$ver-mysql php$ver-xml php$ver-zip; done \
-    && update-alternatives --set php /usr/bin/php7.4
+    && update-alternatives --set php /usr/bin/php$ver
 
 # Create a real jenkins user. Git will not work correctly if the current user is just an id without a user entry.
 ARG JENKINS_USERID
