@@ -13,13 +13,20 @@ RUN apt-get update && apt-get install -y unzip \
 RUN add-apt-repository ppa:ondrej/php && apt-get update
 
 # Add some configuration to PHP (only versions that are still in support will work.
-ADD php/php-config.ini /etc/php/7.2/conf.d/10-docker-php-ext-strath.ini
-ADD php/php-config.ini /etc/php/7.3/conf.d/10-docker-php-ext-strath.ini
-ADD php/php-config.ini /etc/php/7.4/conf.d/10-docker-php-ext-strath.ini
-ADD php/php-config.ini /etc/php/8.0/conf.d/10-docker-php-ext-strath.ini
-ADD php/php-config.ini /etc/php/8.1/conf.d/10-docker-php-ext-strath.ini
-ADD php/php-config.ini /etc/php/8.2/conf.d/10-docker-php-ext-strath.ini
-ADD php/php-config.ini /etc/php/8.3/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/7.2/apache2/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/7.2/cli/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/7.3/apache2/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/7.3/cli/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/7.4/apache2/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/7.4/cli/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.0/apache2/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.0/cli/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.1/apache2/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.1/cli/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.2/apache2/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.2/cli/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.3/apache2/conf.d/10-docker-php-ext-strath.ini
+ADD php/php-config.ini /etc/php/8.3/cli/conf.d/10-docker-php-ext-strath.ini
 
 RUN for ver in 7.2 7.3 7.4 8.0 8.1 8.2 8.3; do apt-get install -y php$ver php$ver-curl php$ver-gd php$ver-intl \
     php$ver-mbstring php$ver-mysql php$ver-xml php$ver-zip; done \
