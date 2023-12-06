@@ -84,7 +84,8 @@ private def runContainers(Map pipelineParams = [:], Closure body) {
         if (withBehatServers == 'firefox') {
             seleniumImage = 'selenium/standalone-firefox:3.141.59'
         }
-        sh "docker run -d --rm --name=${buildTag}-selenium --network=${buildTag} --network-alias=selenium --shm-size=2g ${seleniumImage}"
+        // Run the container as the Jenkins user.
+        sh "docker run -d -u ${jenkinsUserId} --rm --name=${buildTag}-selenium --network=${buildTag} --network-alias=selenium --shm-size=2g ${seleniumImage}"
     }
 
     // Nasty hack to get around the fact that we can't use withEnv to change the PATH on a container

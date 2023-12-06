@@ -29,8 +29,7 @@ RUN for ver in 7.4 8.0 8.1 8.2; do apt-get install -y php$ver php$ver-curl php$v
     && update-alternatives --set php /usr/bin/php$ver
 
 # Create a real jenkins user. Git will not work correctly if the current user is just an id without a user entry.
-ARG JENKINS_USERID
-RUN useradd -m -r -u ${JENKINS_USERID} jenkins
+RUN useradd -m -r jenkins
 
 # Create a home directory for mysql so service can be started.
 RUN mkdir -p /var/lib/mysql \
