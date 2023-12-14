@@ -5,10 +5,11 @@ def call(Map pipelineParams = [:], Closure body) {
     try {
         runContainers(pipelineParams, body)
     } finally {
-        cleanWs deleteDirs: true, notFailBuild: true, patterns: [
-            [pattern: ".composer/**", type: 'EXCLUDE'],
-            [pattern: ".npm/**", type: 'EXCLUDE']
-        ]
+        if (pipelineParams.clean != false) {
+            // We want the workspace to clean unless it has been explicitly told not to.
+            // If it is unset the value will be null, and therefor not evaluate to false.
+            moodlePluginCleanWorkspace()
+        }
 
         // Use "|| true" to prevent cleanup failing job.
         if (pipelineParams.withBehatServers) {
