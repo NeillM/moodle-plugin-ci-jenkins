@@ -2,12 +2,15 @@ def call(Map pipelineParams = [:], Closure body) {
 
     def buildTag = buildTag()
 
+    def cleanExclude = pipelineParams.cleanExclude ?: 'this/will/not/exist/**'
+
     try {
         runContainers(pipelineParams, body)
     } finally {
         cleanWs deleteDirs: true, notFailBuild: true, patterns: [
             [pattern: ".composer/**", type: 'EXCLUDE'],
-            [pattern: ".npm/**", type: 'EXCLUDE']
+            [pattern: ".npm/**", type: 'EXCLUDE'],
+            [pattern: cleanExclude, type: 'EXCLUDE']
         ]
 
         // Use "|| true" to prevent cleanup failing job.
