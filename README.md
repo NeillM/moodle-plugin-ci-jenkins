@@ -44,6 +44,7 @@ This starts up a docker container with a suitable environment for running moodle
 * **withBehatServers**: chrome or firefox. This will start the relevant selenium container and the PHP
   built-in web server to allow the behat command to be run.
 * **ciVersion** the version of moodle-plugin-ci to use
+* **tag** a string that will help uniquely identify the build image if this step is being run n parallel
   
 The step also expects a code block which will be run inside the container
 
