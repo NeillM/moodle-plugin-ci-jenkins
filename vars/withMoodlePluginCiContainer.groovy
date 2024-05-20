@@ -129,12 +129,22 @@ private def runContainers(Map pipelineParams = [:], Closure body) {
 
         // Preload env file with variables to work around withEnv not apparently being picked up by symfony.
         // This shouldn't be necessary so we should get rid of it once we understand the problem.
-        def envFile = "$WORKSPACE/ci/.env"
-        def envContent = "MOODLE_BEHAT_WDHOST=http://selenium:4444/wd/hub\n"
-        envContent << "MOODLE_BEHAT_WWWROOT=http://moodle:8000"
+        if (tag) {
+            def envFile = "$WORKSPACE/$tag/ci/.env"
+            def envContent = "MOODLE_BEHAT_WDHOST=http://selenium:4444/wd/hub\n"
+            envContent << "MOODLE_BEHAT_WWWROOT=http://moodle:8000/$tag"
+        } else {
+            def envFile = "$WORKSPACE/ci/.env"
+            def envContent = "MOODLE_BEHAT_WDHOST=http://selenium:4444/wd/hub\n"
+            envContent << "MOODLE_BEHAT_WWWROOT=http://moodle:8000"
+        }
 
         if (withBehatServers) {
-            sh "php -S 0.0.0.0:8000 -t ${WORKSPACE}/moodle &"
+            if (tag) {
+                sh "php -S 0.0.0.0:8000 -t ${WORKSPACE}/$tag/moodle &"
+            } else {
+                sh "php -S 0.0.0.0:8000 -t ${WORKSPACE}/moodle &"
+            }
         }
 
         // Workaround for the withEnv below not appearing to work.
@@ -146,7 +156,13 @@ private def runContainers(Map pipelineParams = [:], Closure body) {
         // The script has a flag to prevent the servers starting but appears to override it with an environment
         // variable if the plugin has behat tests (in TestSuiteInstaller::getBehatInstallProcesses())
         withEnv(["DB=${installDb}", "MOODLE_START_BEHAT_SERVERS=false"]) {
-            body()
+            if (tag) {
+                dir(tag) {
+                    body()
+                }
+            } else {
+                body()
+            }
         }
 
     }
