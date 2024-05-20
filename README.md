@@ -45,7 +45,7 @@ This starts up a docker container with a suitable environment for running moodle
   built-in web server to allow the behat command to be run.
 * **ciVersion** the version of moodle-plugin-ci to use
 * **tag** a string that will help uniquely identify the build image if this step is being run n parallel
-* **cleanWorkspace** boolean that will flag if we should clean the entire workspace after this step (default: true)
+* **clean** boolean that will flag if we should clean the entire workspace after this step (default: true)
   If you do not clean the workspace you should call moodlePluginCleanWorkspace() manually later.
   
 The step also expects a code block which will be run inside the container

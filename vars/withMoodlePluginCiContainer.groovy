@@ -7,7 +7,7 @@ def call(Map pipelineParams = [:], Closure body) {
     try {
         runContainers(pipelineParams, body)
     } finally {
-        if (pipelineParams.cleanWorkspace != false) {
+        if (pipelineParams.clean != false) {
             // We want the workspace to clean unless it has been explicitly told not to.
             // If it is unset the value will be null, and therefor not evaluate to false.
             moodlePluginCleanWorkspace()
