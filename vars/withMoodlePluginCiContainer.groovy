@@ -4,12 +4,10 @@ def call(Map pipelineParams = [:], Closure body) {
 
     def buildTag = buildTag(tag)
 
-    def cleanWorkspace = pipelineParams.cleanWorkspace ?: true
-
     try {
         runContainers(pipelineParams, body)
     } finally {
-        if (cleanWorkspace) {
+        if (pipelineParams.cleanWorkspace != false) {
             moodlePluginCleanWorkspace()
         }
 
