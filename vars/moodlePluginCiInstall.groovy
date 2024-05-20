@@ -6,7 +6,7 @@ def call(String command = '') {
     }
 
     def tag = "${TAG}"
-    if (tag && (command.contains('--plugin ')) {
+    if (tag && command.contains('--plugin ')) {
         // We need to extract the plugin location.
         Matcher matcher = command  =~ /(?:--plugin )(.*)(?:(?: --)|$)/
         matcher.find()
