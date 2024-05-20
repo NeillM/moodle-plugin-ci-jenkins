@@ -7,10 +7,13 @@ def call(String command = '') {
 
     def tag = "${TAG}"
     if (tag && command.contains('--plugin ')) {
-        // We need to extract the plugin location.
-        Matcher matcher = command  =~ /(?:--plugin )(.*)(?:(?: --)|$)/
-        matcher.find()
-        def path = matcher.group(1)
+        // We split the command on --plugin  so that element 1 contains the path.
+        def initial = command.split('--plugin ')
+        // The path will not be in element 1, but we need to ensure there is nothing following the path,
+        // We assume any following command will have at least a - before it. The path will then be in
+         // the initial element.
+        def second = initial[1].split(' -')
+        def path = second[0]
         // The files will be one directory level down.
         sh "cp -r ../${path} ${path}"
     }
