@@ -12,7 +12,7 @@ def call(String command = '') {
         matcher.find()
         def path = matcher.group(1)
         // The files will be one directory level down.
-        cp -r ../$path $path
+        sh "cp -r ../${path} ${path}"
     }
 
     // The DB env variable can probably be used directly by moodle-plugin-ci, but this lets us check the user hasn't
