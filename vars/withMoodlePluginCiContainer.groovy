@@ -147,7 +147,7 @@ private def runContainers(Map pipelineParams = [:], Closure body) {
         // The script has a flag to prevent the servers starting but appears to override it with an environment
         // variable if the plugin has behat tests (in TestSuiteInstaller::getBehatInstallProcesses())
         withEnv(["DB=${installDb}", "MOODLE_START_BEHAT_SERVERS=false"]) {
-            dir($tag) {
+            dir(tag) {
                 body()
             }
         }
