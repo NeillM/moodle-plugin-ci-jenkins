@@ -42,7 +42,7 @@ private def runContainers(Map pipelineParams = [:], Closure body) {
     def ciVersion = pipelineParams.ciVersion ?: '3';
     def withBehatServers = pipelineParams.withBehatServers
     def tag = pipelineParams.tag ?: ''
-    def path = tag ? "/$tag" : ''
+    def path = tag ? "${tag}/" : ''
 
     if (withBehatServers) {
         if (!(withBehatServers in ['chrome', 'firefox'])) {
@@ -97,7 +97,7 @@ private def runContainers(Map pipelineParams = [:], Closure body) {
     // (or any other method as far as I can see)
     // https://issues.jenkins.io/browse/JENKINS-49076
     def originalDockerPath = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-    def pathOnDocker = "${WORKSPACE}${path}/ci/bin:${originalDockerPath}"
+    def pathOnDocker = "${WORKSPACE}/${path}ci/bin:${originalDockerPath}"
 
     image.inside("-e PATH=${pathOnDocker} --network ${buildTag} --network-alias=moodle") {
 
@@ -130,7 +130,7 @@ private def runContainers(Map pipelineParams = [:], Closure body) {
 
         // Preload env file with variables to work around withEnv not apparently being picked up by symfony.
         // This shouldn't be necessary so we should get rid of it once we understand the problem.
-        def envFile = "${WORKSPACE}${path}/ci/.env"
+        def envFile = "${WORKSPACE}/${path}ci/.env"
         def envContent = "MOODLE_BEHAT_WDHOST=http://selenium:4444/wd/hub\n"
         envContent << "MOODLE_BEHAT_WWWROOT=http://moodle:8000"
 
