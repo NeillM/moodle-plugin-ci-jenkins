@@ -5,6 +5,16 @@ def call(String command = '') {
         error("DB environment variable must be set. Are you running moodlePluginCiInstall outside of the container?")
     }
 
+    def tag = "${TAG}"
+    if (tag && (command.contains('--plugin ')) {
+        // We need to extract the plugin location.
+        Matcher matcher = command  =~ /(?:--plugin )(.*)(?:(?: --)|$)/
+        matcher.find()
+        def path = matcher.group(1)
+        // The files will be one directory level down.
+        cp -r ../$path $path
+    }
+
     // The DB env variable can probably be used directly by moodle-plugin-ci, but this lets us check the user hasn't
     // tried to pass it more easily.
     def installParams = [
@@ -25,8 +35,6 @@ def call(String command = '') {
         installCommand << "--${key} ${val}"
     }
     installCommand << command
-
-    sh 'pwd'
 
     sh installCommand.join(' ')
 
