@@ -13,9 +13,12 @@ def call(String command = '') {
         // We assume any following command will have at least a - before it. The path will then be in
          // the initial element.
         def second = initial[1].split(' -')
-        def path = second[0]
+        // We now spit the path on the directory separator
+        def path = second[0].split('/')
+        // Find the real first level of the directory, then copy everything in it.
+        def directory = (path[0] == '.') ? path[1] : path[0]
         // The files will be one directory level down.
-        sh "cp -r ../${path} ${path}"
+        sh "cp -r ../${directory} ${directory}"
     }
 
     // The DB env variable can probably be used directly by moodle-plugin-ci, but this lets us check the user hasn't
