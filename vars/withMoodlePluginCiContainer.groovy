@@ -4,16 +4,14 @@ def call(Map pipelineParams = [:], Closure body) {
 
     def buildTag = buildTag(tag)
 
-    def cleanExclude = pipelineParams.cleanExclude ?: 'this/will/not/exist/**'
+    def cleanWorkspace = pipelineParams.cleanWorkspace ?: true
 
     try {
         runContainers(pipelineParams, body)
     } finally {
-        cleanWs deleteDirs: true, notFailBuild: true, patterns: [
-            [pattern: ".composer/**", type: 'EXCLUDE'],
-            [pattern: ".npm/**", type: 'EXCLUDE'],
-            [pattern: cleanExclude, type: 'EXCLUDE']
-        ]
+        if (cleanWorkspace) {
+            moodlePluginCleanWorkspace()
+        }
 
         // Use "|| true" to prevent cleanup failing job.
         if (pipelineParams.withBehatServers) {
