@@ -26,6 +26,8 @@ def call(String command = '') {
     }
     installCommand << command
 
+    sh 'pwd'
+
     sh installCommand.join(' ')
 
 }
